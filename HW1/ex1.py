@@ -22,7 +22,6 @@ def grayscale_image(image):
 def save_image(image, output_path):
     cv2.imwrite(output_path, image)
 
-
 # flip an image as function 
 def flip_image(image):
     flipped_img = cv2.flip(image, 1)
@@ -67,6 +66,11 @@ if __name__ == "__main__":
 
     # Save the rotated grayscale image
     save_image(img_gray_rotated, "./lena_gray_rotated.jpg")
+
+    img_flipped = flip_image(img)
+    img_rotated = rotate_image(img, 45)
+    save_image(img_flipped, "./uet_flipped.jpg")
+    save_image(img_rotated, "./uet_rotated.jpg")
 
     # Show the images
     plt.show() 
