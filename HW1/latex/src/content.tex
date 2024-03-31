@@ -1,0 +1,81 @@
+\section{Original Image}
+\begin{figure} [h]
+    \centering
+    \includegraphics[width=0.25\textwidth]{img/uet.png}
+    \caption{Original image}
+\end{figure}
+
+\section{Flip Image}
+\subsection{Implementation}
+\begin{minted}[
+frame=lines,
+framesep=2mm,
+baselinestretch=1.2,
+fontsize=\footnotesize
+]{python}
+def flip_image(image):
+    flipped_img = cv2.flip(image, 1)
+    return flipped_img    
+\end{minted}
+
+\subsection{Result}
+\begin{figure} [h]
+    \centering
+    \includegraphics[width=0.25\textwidth]{img/uet_flipped.jpg}
+    \caption{Flipped image}
+\end{figure}
+
+\newpage
+\section{Rotate Image}
+\subsection{Implementation}
+\begin{minted}[
+frame=lines,
+framesep=2mm,
+baselinestretch=1.2,
+fontsize=\footnotesize
+]{python}
+def rotate_image(image, angle):
+    (width, height) = image.shape[1::-1]
+    image_center = (width/2, height/2) 
+    rotate_matrix = cv2.getRotationMatrix2D(center=image_center, angle=angle, scale=1)
+    rotate_img = cv2.warpAffine(src=image, M=rotate_matrix, dsize=(width, height))
+    return rotate_img  
+\end{minted}
+
+\subsection{Result}
+\begin{figure} [h]
+    \centering
+    \includegraphics[width=0.25\textwidth]{img/uet_rotated.jpg}
+    \caption{Rotated image}
+\end{figure}
+
+\section{Grayscale Image}
+\subsection{Implementation}
+\begin{minted}[
+frame=lines,
+framesep=2mm,
+baselinestretch=1.2,
+fontsize=\footnotesize
+]{python}
+def grayscale_image(image):
+    gray_img = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+    return gray_img
+\end{minted}
+
+\subsection{Result}
+\begin{figure} [h]
+    \centering
+    \includegraphics[width=0.25\textwidth]{img/lena_gray.jpg}
+    \caption{Grayscaled image}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
