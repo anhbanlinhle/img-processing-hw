@@ -1,0 +1,156 @@
+%-------------------------------------------------------------------------------
+% TEMPLATE FOR ITU HWs and Assignments
+% (c) Javad Ibrahimli, 2023
+
+% This is a template for a HWs document, created by JAVAD IBRAHIMLI.
+% All rights are reserved. 
+%------------------------------------------------------------------------------- 
+
+
+% ------------------ DOCUMENT SETUP ------------------ 
+% The document class defines the document type (report) and sets the font size (12pt)
+\documentclass[12pt]{report}
+\author{Viet-Linh Le-Viet}
+
+
+% Inputs the Document Packages
+\input{src/_Packages}
+
+% Controls how many subsections the document can take
+%  and how many of those will get put into the contents pages.
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+
+% Line Spacing
+\setstretch{1.5}
+
+
+% Places a dot after Chapter/Section/Subsection number in Table of Contents
+\renewcommand{\cftchapaftersnum}{.}
+\renewcommand{\cftsecaftersnum}{.}
+\renewcommand{\cftsubsecaftersnum}{.}
+
+%  Customize Dot spacing in Table of Contents/List of Figures/Tables
+\renewcommand{\cftdotsep}{0.3}
+
+
+% Line Break Properties
+\tolerance=1
+\emergencystretch=\maxdimen
+\hyphenpenalty=10000
+\hbadness=10000
+
+
+% Formatting Table of Contents/Lists titles
+\renewcommand{\contentsname}{\bfseries\LARGE{CONTENTS}}
+\renewcommand{\listfigurename}{\bfseries\LARGE{LIST OF FIGURES}}
+
+% Signature Line for the declaration
+\newbox\namebox
+\newdimen\signboxdim
+
+\def\signature#1{%
+    \setbox\namebox=\hbox{#1}
+    \signboxdim=\dimexpr(\wd\namebox+3cm)
+    \parbox[t]{\signboxdim}{%
+        \centering
+            \hrulefill\\    % for a line
+            #1
+        \par}%
+    }
+
+% Title Formatting customization
+\titleformat{\chapter}{\normalfont\bfseries\LARGE}{\thechapter.}{1em}{\MakeUppercase}
+
+\titleformat{\section}{\normalfont\bfseries\large}{\thesection.}{1em}{\MakeUppercase}
+\titlespacing*{\section} {0pt} {0pt} {15pt} % left, before, after
+
+\titleformat{\subsection}{\normalfont\bfseries\large}{\thesubsection.}{1em}{}
+\titlespacing*{\subsection} {0pt} {15pt} {15pt}
+
+\titleformat{\subsubsection}{\normalfont\bfseries\large}{\thesubsubsection.}{1em}{}
+\titlespacing*{\subsubsection} {0pt} {10pt} {10pt}
+
+
+% HEADER AND FOOTER
+\pagestyle{fancy}  % Set Page Style (Header and Footer Style)
+% \fancyhf{}  % Clears the header and footer (from the default info)
+
+% Header and footer
+\setlength{\headheight}{15pt}
+\lhead{Viet-Linh Le-Viet}
+\rhead{Homework 2}
+\cfoot{\thepage}
+
+% Change figure numbering per section
+\numberwithin{figure}{chapter}
+
+%Acronym entries
+% \makeglossaries
+% \newacronym{US}{US}{Ultrasound}
+
+
+
+%  -------------------------------------------------
+%  --------- The document starts from here --------- 
+%  -------------------------------------------------
+
+\begin{document}
+
+
+% ------------------  TITLE PAGE -------------------
+\begin{titlepage}
+\begin{center}
+
+    
+    {\relscale{1.90}\textbf{VNU University of Engineering and Technology\\}}
+    % UCL IMAGE
+    \vspace*{1.0cm}
+    \makebox[\textwidth]{\includegraphics[width=0.2\paperwidth]{img/uet.png}}
+
+    \vspace{0.5cm}
+    {\relscale{2.00}\textbf{Image Processing\\}}
+    \vspace{0.3cm}
+    {\relscale{1.35}\textbf{INT2214 22\\}}
+    \vspace{1.4cm}
+    
+    {\relscale{2.00}{HOMEWORK NO.2}}\\
+    %\vspace{0.1cm}
+    By\\
+    %\vspace{0.1cm}
+    Viet-Linh Le-Viet \\ 21020644\\
+    \vspace{0.9cm}
+    {\begin{singlespace}Course given by:\\\end{singlespace}}
+    {\begin{singlespace} Le Thanh Ha\\
+    Le Cong Thuong\\\end{singlespace}}
+
+
+\end{center}
+{\vfill{
+ \begin{center}
+  \today\\
+ \end{center}
+}\par
+}
+\end{titlepage}
+
+\tableofcontents
+
+\newpage
+% -------------------  OBJECTIVES  ---------------------
+\chapter{Image Filtering}
+\newpage
+\input{src/Filter} % Section/Chapter entries can be done in the Main.tex file or in a  
+                       % separate tex file for longer and more complex documents
+
+
+% -------------------  RESULTS  ---------------------
+\chapter{Fourier Transform}
+\newpage
+\input{src/Transform} % Section/Chapter entries can be done in the Main.tex file or in a  
+                       % separate tex file for longer and more complex documents
+
+\end{document}
+%  -------------------------------------------------
+%  --------- The document ends from here ----------- 
+%  -------------------------------------------------
