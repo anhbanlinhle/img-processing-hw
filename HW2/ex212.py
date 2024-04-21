@@ -14,9 +14,17 @@ def DFT_slow(data):
     DFT: Nx1: 1D numpy array 
   """
   # You need to implement the DFT here
+  N = len(data)
+  n = np.arange(N)
+  k = n.reshape((N, 1))
+  e = np.exp(-2j * np.pi * k * n / N)
+  X = np.dot(e, data)
+  
+  return X
 
 
-def show_img(origin, row_fft, row_col_fft):
+
+def show_img(origin, row_fft, row_col_fft, img_name):
     """
     Show the original image, row-wise FFT and column-wise FFT
 
@@ -35,6 +43,7 @@ def show_img(origin, row_fft, row_col_fft):
     axs[2].imshow((np.log(np.abs(np.fft.fftshift(row_col_fft)))), cmap='gray')
     axs[2].set_title('Column-wise FFT')
     axs[2].axis('off')
+    plt.savefig(f'out/ex212/{img_name}.png')
     plt.show()
 
 
@@ -50,6 +59,10 @@ def DFT_2D(gray_img):
         row_col_fft: (H, W): 2D numpy array that contains the column-wise FFT of the input image
     """
     # You need to implement the DFT here
+    row_fft = np.fft.fft(gray_img, axis=1)
+    row_col_fft = np.fft.fft(row_fft, axis=0)
+
+    return row_fft, row_col_fft
 
 
 
@@ -63,9 +76,8 @@ if __name__ == '__main__':
     img = io_url.imread('https://img2.zergnet.com/2309662_300.jpg')
     gray_img = np.mean(img, -1)
     row_fft, row_col_fft = DFT_2D(gray_img)
-    show_img(gray_img, row_fft, row_col_fft)
+    show_img(gray_img, row_fft, row_col_fft, "DFT_2D")
 
- 
 
 
 
