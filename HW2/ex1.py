@@ -17,57 +17,70 @@ def read_img(img_path):
 
 
 def padding_img(img, filter_size=3):
-    """
-    The surrogate function for the filter functions.
-    The goal of the function: replicate padding the image such that when applying the kernel with the size of filter_size, the padded image will be the same size as the original image.
-    WARNING: Do not use the exterior functions from available libraries such as OpenCV, scikit-image, etc. Just do from scratch using function from the numpy library or functions in pure Python.
-    Inputs:
-        img: cv2 image: original image
-        filter_size: int: size of square filter
-    Return:
-        padded_img: cv2 image: the padding image
-    """
-  # Need to implement here
+    h, w = img.shape[:2]
+    pad = filter_size // 2
+
+    padded_img = np.zeros((h + 2 * pad, w + 2 * pad), dtype=img.dtype)
+
+    padded_img[pad : pad + h, pad : pad + w] = img
+
+    for i in range(pad):
+        padded_img[i, pad : pad+w] = img[0, :]
+        padded_img[-i-1, pad : pad+w] = img[-1, :]
+    
+    for i in range(pad):
+        padded_img[pad : pad+h, i] = padded_img[pad : pad+h, pad]
+        padded_img[pad : pad+h, -i-1] = padded_img[pad : pad+h, -pad-1]
+    
+    padded_img[:pad, :pad] = img[0, 0]
+    padded_img[:pad, -pad:] = img[0, -1]
+    padded_img[-pad:, :pad] = img[-1, 0]
+    padded_img[-pad:, -pad:] = img[-1, -1]
+
+    return padded_img
 
 def mean_filter(img, filter_size=3):
-    """
-    Smoothing image with mean square filter with the size of filter_size. Use replicate padding for the image.
-    WARNING: Do not use the exterior functions from available libraries such as OpenCV, scikit-image, etc. Just do from scratch using function from the numpy library or functions in pure Python.
-    Inputs:
-        img: cv2 image: original image
-        filter_size: int: size of square filter,
-    Return:
-        smoothed_img: cv2 image: the smoothed image with mean filter.
-    """
-  # Need to implement here
+    padded_img = padding_img(img=img, filter_size=filter_size)
+    h, w = img.shape[:2]
+    
+    smoothed_img = np.zeros_like(img)
+
+    for i in range(h):
+        for j in range(w):
+            neighborhood = padded_img[i : i+filter_size, j : j+filter_size]
+            mean_value = np.mean(neighborhood)
+            smoothed_img[i, j] = mean_value
+    
+    return smoothed_img
 
 def median_filter(img, filter_size=3):
-    """
-        Smoothing image with median square filter with the size of filter_size. Use replicate padding for the image.
-        WARNING: Do not use the exterior functions from available libraries such as OpenCV, scikit-image, etc. Just do from scratch using function from the numpy library or functions in pure Python.
-        Inputs:
-            img: cv2 image: original image
-            filter_size: int: size of square filter
-        Return:
-            smoothed_img: cv2 image: the smoothed image with median filter.
-    """
-  # Need to implement here
+    padded_img = padding_img(img=img, filter_size=filter_size)
+    h, w = img.shape[:2]
+    
+    smoothed_img = np.zeros_like(img)
+
+    for i in range(h):
+        for j in range(w):
+            neighborhood = padded_img[i : i+filter_size, j : j+filter_size]
+            median_value = np.median(neighborhood)
+            smoothed_img[i, j] = median_value
+    
+    return smoothed_img
 
 
 def psnr(gt_img, smooth_img):
-    """
-        Calculate the PSNR metric
-        Inputs:
-            gt_img: cv2 image: groundtruth image
-            smooth_img: cv2 image: smoothed image
-        Outputs:
-            psnr_score: PSNR score
-    """
-    # Need to implement here
+    mse = np.mean((gt_img - smooth_img) ** 2)
+
+    if mse == 0:
+        return 100
+    
+    max_pixel = 255.0
+    psnr = 10 * math.log10((max_pixel * max_pixel) / mse)
+    return psnr
 
 
 
-def show_res(before_img, after_img):
+def show_res(before_img, after_img, img_name):
     """
         Show the original image and the corresponding smooth image
         Inputs:
@@ -84,22 +97,23 @@ def show_res(before_img, after_img):
     plt.subplot(1, 2, 2)
     plt.imshow(after_img, cmap='gray')
     plt.title('After')
+    plt.savefig(f'out/ex1/{img_name}.png')
     plt.show()
 
 
 if __name__ == '__main__':
-    img_noise = "" # <- need to specify the path to the noise image
-    img_gt = "" # <- need to specify the path to the gt image
+    img_noise = "img/noise.png" # <- need to specify the path to the noise image
+    img_gt = "img/original.png" # <- need to specify the path to the gt image
     img = read_img(img_noise)
     filter_size = 3
 
     # Mean filter
     mean_smoothed_img = mean_filter(img, filter_size)
-    show_res(img, mean_smoothed_img)
+    show_res(img, mean_smoothed_img, "mean_smoothed")
     print('PSNR score of mean filter: ', psnr(img, mean_smoothed_img))
 
     # Median filter
     median_smoothed_img = median_filter(img, filter_size)
-    show_res(img, median_smoothed_img)
+    show_res(img, median_smoothed_img, "median_smoothed")
     print('PSNR score of median filter: ', psnr(img, median_smoothed_img))
 
